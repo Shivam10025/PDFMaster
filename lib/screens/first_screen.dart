@@ -234,3 +234,248 @@ List<FileSystemEntity> _folders=[];
           });
         });
   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xfffafafa),
+      appBar: searchBar.build(context),
+      key: _scaffoldKey,
+        body:  SingleChildScrollView(
+          child: Column(
+            children: [
+              DataTable(
+                dataRowHeight: 60,
+                sortAscending: true,
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Folders',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ],
+                rows: List.generate(_folders.length, (index) =>
+                    DataRow(
+                        cells: <DataCell>[
+                          DataCell(_folders[index].path.contains("-dc") && !_folders[index].path.contains("2022") ? SizedBox(
+                            height: 300,
+                            child: Card(
+                                child: ListTile(
+                                  title: Text(_folders[index].path.split('/').last),
+                                  leading: const Icon(Icons.folder, color: Colors.red,),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.grey,),
+                                    tooltip: 'Delete',
+                                    onPressed: () {
+                                      _showDeleteDialog(index);
+                                    },
+                                  ),
+                                  onTap: () {//OpenFile.open(files[index].path);
+                                    Navigator.push(context, MaterialPageRoute(builder: (builder){
+                                      return InnerScreen(filespath:_folders[index].path.split('/').last);
+                                    }));
+                                  },
+                                )),
+                          ) : const Text("")
+                ),]
+                    ),
+                ),
+              ),
+              DataTable(
+                dataRowHeight: 60,
+                sortAscending: true,
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Files',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ],
+                rows: List.generate(files.length, (index) =>
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(files[index].path.contains(_search) ? SizedBox(
+                          height: 300,
+                          child: Card(
+                               child: ListTile(
+                              title: Text(files[index].path.split('/').last),
+                leading: const Icon(Icons.picture_as_pdf, color: Colors.red,),
+                trailing: IconButton(
+                      icon: const Icon(Icons.share , color: Colors.red,),
+                      tooltip: 'Share Button',
+                      onPressed: () {
+                        Share.shareFiles([files[index].path], text: 'PDF Master');
+                      },
+                    ),
+                onTap: () {
+                  OpenFile.open(files[index].path);
+                },
+              )),
+                        ) : const SizedBox(
+                      height: 0,)
+                    ),]
+                ),
+              ),
+              ),
+            ],
+          ),
+        ),
+        /*body:files == null? Text("Searching Files"):
+        ListView.builder(  //if file/folder list is grabbed, then show here
+          itemCount: files?.length ?? 0,
+          itemBuilder: (context, index) {
+            if(files[index].path.contains(_search)) {
+              return Card(
+                  child: ListTile(
+                    title: Text(files[index].path
+                        .split('/')
+                        .last),
+                    leading: Icon(Icons.picture_as_pdf),
+                    trailing: Icon(
+                      Icons.arrow_forward, color: Colors.redAccent,),
+                    onTap: () {
+                      /* Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ViewPDF(pathPDF:files[index].path.toString());
+                      //open viewPDF page on click
+                    }));*/
+                    },
+                  )
+              );
+            }else{
+              return Text("");
+            }
+            },
+        ),*/
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Padding(padding: const EdgeInsets.only(left:31, bottom: 50),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FloatingActionButton.extended(
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => Doc_Scanner(filespath: "",))),
+                autofocus: true,
+                elevation: 0.0,
+                hoverColor: Colors.green,
+                hoverElevation: 0.0,
+                label: const Text('Scan Document'),
+                icon: const Icon(CupertinoIcons.camera_viewfinder),
+                backgroundColor: Colors.pink,
+              ),),
+      ),
+      ],
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        backgroundColor:const Color(0xfffafafa) ,
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              margin: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(25.0),
+              decoration: BoxDecoration(
+                color: Color(0xfff8f5f0),
+                shape: BoxShape.circle,
+                image:DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage("assets/images/LOGO.png"))
+              ),
+              child: Text('' ,style: TextStyle(color: Colors.black , fontWeight: FontWeight.w500 , fontSize: 20 )),
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 42.0 , bottom: 3),
+                      child: Icon(CupertinoIcons.doc_fill, size: 30, color: Colors.pink,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0 , bottom: 3),
+          child: Text("PDF Master" ,style: TextStyle(fontFamily: "Poppins",color: Colors.green , fontWeight: FontWeight.w500 , fontSize: 25),),
+          ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 , top: 0),
+                      child: Icon(CupertinoIcons.camera_viewfinder, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 , top: 0),
+                      child: Text("Doc Scanner" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => Doc_Scanner(filespath: "",)));
+              },
+            ),
+           /* ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.square_split_2x1, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Split PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),*/
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.square_split_1x2_fill, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Merge PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => PDF_MERGE()));
+              },
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.camera_on_rectangle, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Image to PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => Image_Pdf()));
+              },
+            ),
