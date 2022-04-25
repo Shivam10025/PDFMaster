@@ -479,3 +479,192 @@ List<FileSystemEntity> _folders=[];
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => Image_Pdf()));
               },
             ),
+              ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.doc_on_clipboard, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("PDF to Word" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.doc_on_doc, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Word to PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.speaker_zzz, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("PDF Reader" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.padlock_solid, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Secure PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.rectangle_compress_vertical, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Compress PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.signature, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Sign PDF" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.list_number, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Add Page Number " ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.bookmark, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("Add WaterMark" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.cloud_upload, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("BackUp Documents" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0 , bottom: 0 ,),
+                      child: Icon(CupertinoIcons.exclamationmark_bubble, size: 25, color: Colors.purple,) ,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0 , bottom: 0 ,),
+                      child: Text("About Us" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 20),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+            ListTile(
+              title: Container(
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 50.0 ,  top:20 , bottom: 10 ),
+                      child: Text("V1.0 powered by NITUK" ,style: TextStyle(fontFamily: "OpenSans",color: Colors.black54 , fontSize: 13),),
+                    ),
+                  ],
+                ),
+              ) ,
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

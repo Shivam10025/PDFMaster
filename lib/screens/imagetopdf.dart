@@ -174,3 +174,146 @@ class _Image_Pdf extends State<Image_Pdf> {
 
     ),
   );
+  void onPressed(){
+    Navigator.of(context).pop(_controller.text);
+  }
+  Future<String?> opendialogue2() => showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Password"),
+      content: TextField(
+        autofocus: true,
+        decoration: const InputDecoration(
+            hintText: 'Enter Password'
+        ),
+        controller: _controller2,
+      ),
+      actions: [
+        TextButton(
+            onPressed: onPressed2,
+            child: const Text("Submit"))
+      ],
+    ),
+  );
+  void onPressed2(){
+    Navigator.of(context).pop(_controller2.text);
+  }
+  getImageFromCamera() async {
+    String? imagePath;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      imagePath = (await EdgeDetection.detectEdge);
+      print("$imagePath");
+    } on PlatformException catch (e) {
+      imagePath = e.toString();
+    }
+    if (!mounted) return;
+    if(imagePath!=null){
+      imageFile = File(imagePath);
+      fileName = Path.basename(imageFile.path);
+      var image = imageLib.decodeImage(await imageFile.readAsBytes());
+      image = imageLib.copyResize(image!, width: 600);
+      Map imagefile = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PhotoFilterSelector(
+            title: const Text("Photo Filter"),
+            image: image!,
+            filters: presetFiltersList,
+            filename: fileName,
+            loader: const Center(child: CircularProgressIndicator()),
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+
+      if (imagefile != null && imagefile.containsKey('image_filtered')) {
+        setState(() {
+          _image.add(imagefile['image_filtered']);
+        });
+        print(imageFile.path);
+      }
+    }
+
+  }
+
+  createPDF() async {
+    if(prev!=_image.length) {
+      for (var img in _image) {
+        if (img != Null) {
+          final image = pw.MemoryImage(img.readAsBytesSync());
+          PdfPage page = pdf.pages.add();
+          PdfGraphicsState state = page.graphics.save();
+          page.graphics.setTransparency(2.5);
+          page.graphics.drawImage(
+              PdfBitmap(img.readAsBytesSync()),
+              Rect.fromLTWH(
+                  0, 0, page.getClientSize().width, page.getClientSize().height));
+        }
+      }
+      PdfPageTemplateElement footer = PdfPageTemplateElement(
+          Rect.fromLTWH(0, 0, pdf.pages[0].getClientSize().width, 50));
+      PdfPageNumberField pageNumber = PdfPageNumberField(
+          font: PdfStandardFont(PdfFontFamily.courier, 15),
+          brush: PdfSolidBrush(PdfColor(0, 0, 0)));
+      pageNumber.numberStyle = PdfNumberStyle.numeric;
+      PdfPageCountField count = PdfPageCountField(
+          font: PdfStandardFont(PdfFontFamily.courier, 15),
+          brush: PdfSolidBrush(PdfColor(0, 0, 0)));
+      count.numberStyle = PdfNumberStyle.numeric;
+      PdfCompositeField compositeField = PdfCompositeField(
+          font: PdfStandardFont(PdfFontFamily.courier, 15),
+          brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+          text: isChecked ? 'Page {0} of {1} ' : 'Page {0} of {1} (Scanned By Doc Scanner)' ,
+          fields: <PdfAutomaticField>[pageNumber, count]);
+      compositeField.bounds = footer.bounds;
+      compositeField.draw(footer.graphics,
+          Offset(200, 40 - PdfStandardFont(PdfFontFamily.courier, 15).height));
+      pdf.template.bottom = footer;
+      if(ps.length!=0){
+        PdfSecurity security = pdf.security;
+
+//Specifies encryption algorithm and key size
+        security.algorithm = PdfEncryptionAlgorithm.rc4x128Bit;
+
+//Set user password
+        security.userPassword = ps;
+      }
+      prev= _image.length;
+    }
+  }
+  savePDF() async {
+    try {
+      final dir = await getExternalStorageDirectory();
+      final file = File('${dir?.path}/'+DateTime.now().toString()+'.pdf');
+      OpenFile.open(file.path);
+      await file.writeAsBytes(await pdf.save());
+      showPrintedMessage('success', 'saved to'+file.path,);
+    } catch(e){
+      showPrintedMessage('error', e.toString());
+    }
+    pdf.dispose();
+  }
+  void reorderData(int oldindex, int newindex){
+    setState(() {
+      if(newindex>oldindex){
+        newindex-=1;
+      }
+      final items =_image.removeAt(oldindex);
+      _image.insert(newindex, items);
+    });
+  }
+
+  showPrintedMessage(String title, String msg) {
+    Flushbar(
+      title: title,
+      message: msg,
+      duration: const Duration(seconds: 3),
+      icon: const Icon(
+        Icons.info,
+        color: Colors.blue,
+      ),
+    ).show(context);
+  }
+}
