@@ -5,17 +5,3 @@ class CustomFont extends StatelessWidget {
   final fontWeight;
 
   CustomFont({this.inputText, this.fontSize, this.fontType, this.fontWeight});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      inputText,
-      style: TextStyle(
-        fontFamily: fontType,
-        fontWeight: fontWeight,
-        fontSize: fontSize,
-      ),
-    );
-  }
-
-}
