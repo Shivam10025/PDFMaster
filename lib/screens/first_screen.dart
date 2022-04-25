@@ -131,3 +131,106 @@ class _FirstScreen extends State<FirstScreen>{
           ],
         ),
     );
+List<FileSystemEntity> _folders=[];
+  Future<void> getDir() async {
+    final directory = await getExternalStorageDirectory();
+    final dir = directory?.path;
+    String pdfDirectory = '$dir/';
+    final myDir = Directory(pdfDirectory);
+    setState(() {
+      _folders = myDir.listSync(recursive: true, followLinks: false);
+    });
+    _folders.removeWhere((path) => path.toString().contains("-dc")==false);
+    _folders.removeWhere((path) => path.toString().split('/').last.contains(".pdf")==true);
+    print(_folders);
+  }
+  Future<void> _showDeleteDialog(int index) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      //555656
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure to delete this folder?',
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Yes'),
+              onPressed: () async {
+                await _folders.removeAt(index);
+                setState(() {
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  @override
+  void initState() {
+    _folders=[];
+    getDir();
+    getFiles();
+    super.initState();
+  }
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+        centerTitle: false,
+        titleSpacing: 0.0,
+        toolbarHeight: 60,
+        title: const Padding(
+          padding: EdgeInsets.only(left: 3.0 , bottom: 3),
+          child: Text("Tools" ,style: TextStyle(color: Colors.black , fontWeight: FontWeight.w500 , fontSize: 20),),
+        ) , backgroundColor: const Color(0xfff8f5f0) ,iconTheme: const IconThemeData(color: Colors.black) ,elevation: 0.0,
+        actions: [
+          searchBar.getSearchAction(context) ,
+          IconButton(
+            onPressed:(){
+              _showMyDialog();
+            },
+            icon: const Icon(Icons.add_card)),
+          IconButton(
+              onPressed: (){
+              },
+              icon: const Icon(CupertinoIcons.folder_circle)),
+          IconButton(
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => FirstScreen())),
+              icon: const Icon(CupertinoIcons.settings))]);
+  }
+  void onSubmitted(String value) {
+    setState(() => _scaffoldKey.currentState
+        ?.showSnackBar(SnackBar(content: Text('You wrote $value!'))));
+  }
+
+  _FirstScreen() {
+    searchBar =SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onChanged: (value) {
+          setState(() {
+            _search = value;
+          });
+        },
+        onCleared: () {
+          setState(() {
+            _search = "";
+          });
+        },
+        onClosed: () {
+          setState(() {
+            _search = "";
+          });
+        });
+  }
